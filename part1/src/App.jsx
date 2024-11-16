@@ -42,5 +42,5 @@ const App = () => {
     </div>
   );
 };
-//tiikerihaara
+//mitä täällä tapahtuu
 export default App;
