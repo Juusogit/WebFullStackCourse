@@ -42,6 +42,5 @@ const App = () => {
     </div>
   );
 };
-//mitä täällä tapahtuu
-//vai tapahtuuko mitään
+//testaan toimiiko git
 export default App;
