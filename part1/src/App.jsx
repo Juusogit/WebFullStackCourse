@@ -1,33 +1,40 @@
 import { useState } from 'react'
 
+const StatisticLine = ({ text, value }) => (
+  <p>
+    {text} {value}
+  </p>
+);
+
 const Statistics = ({good, neutral, bad}) => {
   const total = good + bad + neutral
   const average = (good * 1 + bad * -1) / total
   const positive = good/total * 100
   if (total === 0) {
-    return <p>No feedback given</p>;
+    return <p>No feedback given</p>
 }
 
-return(
+return (
   <div>
-    <p>Good {good}</p>
-      <p>Neutral {neutral}</p>
-      <p>Bad {bad}</p>
-      <p>All {total}</p>
-      <p>Average {average}</p>
-      <p>Positive {positive.toFixed(2)}%</p>
+    <StatisticLine text="Good" value={good} />
+    <StatisticLine text="Neutral" value={neutral} />
+    <StatisticLine text="Bad" value={bad} />
+    <StatisticLine text="All" value={total} />
+    <StatisticLine text="Average" value={average.toFixed(2)} />
+    <StatisticLine text="Positive" value={`${positive.toFixed(2)}%`} />
   </div>
   )
 }
 
 const Button = ({ onClick, text }) => (
   <button onClick={onClick}>{text}</button>
-);
+)
 
 const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  
 
   return (
     <div>
