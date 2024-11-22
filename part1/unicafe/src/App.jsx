@@ -1,5 +1,9 @@
 import { useState } from 'react'
 
+const Button = ({ onClick, text }) => (
+  <button onClick={onClick}>{text}</button>
+)
+
 const StatisticLine = ({ text, value }) => (
   <p>
     {text} {value}
@@ -25,10 +29,6 @@ return (
   </div>
   )
 }
-
-const Button = ({ onClick, text }) => (
-  <button onClick={onClick}>{text}</button>
-)
 
 const App = () => {
   const [good, setGood] = useState(0)
