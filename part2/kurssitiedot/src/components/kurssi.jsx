@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const Part = (props) => {
     console.log('props value is', props)
     return (
