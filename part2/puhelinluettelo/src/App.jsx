@@ -39,7 +39,6 @@ const App = () => {
       .get('http://localhost:3001/persons')
       .then(response => {
         setPersons(response.data)
-        setNewName('')
       })
   }, [])
 
@@ -66,20 +65,27 @@ const App = () => {
       return
     }
 
+
     const addObject = {
       name: newName,
       number: newNumber,
     }
 
+    axios
+    .post('http://localhost:3001/persons', addObject)
+    .then(response => {
+      setPersons(persons.concat(response.data))
+    })
+
     setPersons(persons.concat(addObject))
     setNewName('')
     setNewNumber('')
+    
   }
 
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
-  
 
   return (
     <div>
@@ -95,7 +101,7 @@ const App = () => {
       <h3>Numbers</h3>
       <PersonList persons={personsToShow} />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
