@@ -1,5 +1,32 @@
 import { useState } from 'react'
 
+const FilterForm = ({ filter, handleFilterChange }) => (
+  <div>
+    find: <input value={filter} onChange={handleFilterChange} />
+  </div>
+)
+const AddPersonForm = ({ add, newName, newNumber, addName, addNumber }) => (
+  <form onSubmit={add}>
+    <h3>add new</h3>
+    <div>
+      name: <input value={newName} onChange={addName} />
+    </div>
+    <div>
+      number: <input value={newNumber} onChange={addNumber} />
+    </div>
+    <div>
+      <button type="submit">add</button>
+    </div>
+  </form>
+)
+const PersonList = ({ persons }) => (
+  <div>
+    {persons.map(person => (
+      <li key={person.name}>{person.name}: {person.number}</li>
+    ))}
+  </div>
+)
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456' },
@@ -15,9 +42,11 @@ const App = () => {
   const addName = (event) => {
     setNewName(event.target.value)
   }
-
   const addNumber = (event) => {
     setNewNumber(event.target.value)
+  }
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value)
   }
 
   const add = (event) => {
@@ -43,10 +72,6 @@ const App = () => {
     setNewNumber('')
   }
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value)
-  }
-
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
@@ -55,29 +80,18 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <div>
-        filter shown with <input value={filter} onChange={handleFilterChange} />
-      </div>
-      <form onSubmit={add}>
-        <h3>add new</h3>
-        <div>
-          name: <input value={newName} onChange={addName} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={addNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <div>debugName: {newName}</div>
-      <div>debugNumber: {newNumber}</div>
+      <FilterForm filter={filter} handleFilterChange={handleFilterChange} />
+      <AddPersonForm
+        add={add}
+        newName={newName}
+        newNumber={newNumber}
+        addName={addName}
+        addNumber={addNumber}
+      />
       <h3>Numbers</h3>
-        {personsToShow.map(person => (
-          <li key={person.name}>{person.name}: {person.number}</li>
-        ))}
+      <PersonList persons={personsToShow} />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
