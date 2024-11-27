@@ -30,12 +30,36 @@ const PersonList = ({ persons, handleDelete}) => (
     ))}
   </div>
 )
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
+const Alert = ({message2}) => {
+  if (message2 === null) {
+    return null
+  }
+
+  return (
+    <div className="error2">
+      {message2}
+    </div>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState ('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [alertMessage, setAlertMessage] = useState(null)
 
   useEffect(() => {
     peopleService
@@ -47,7 +71,7 @@ const App = () => {
 
   const add = (event) => {
     event.preventDefault()
-    console.log('estetty päivittymästä')
+    console.log('sivu estetty päivittymästä')
 
     if (!newName.trim()) {
       alert('Write your name!')
@@ -70,8 +94,15 @@ const App = () => {
           .update(existingPerson.id, updatedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
-            console.log('päivitetty!')
-      })
+            setErrorMessage(`Numero päivitetty!`)
+            setTimeout(() => {setErrorMessage(null)}, 2000)
+            console.log('numero päivitetty!')
+        })
+            .catch(error => {
+            setAlertMessage(`An error has occurred.`)
+            setTimeout(() => { setAlertMessage(null) }, 2000)
+            console.error('VIRHE', error)
+        })
       return
     }
   
@@ -87,6 +118,8 @@ const App = () => {
         setPersons(persons.concat(newPerson))
         setNewName('')
         setNewNumber('')
+        setErrorMessage(`Nimi lisätty!`)
+            setTimeout(() => {setErrorMessage(null)}, 2000)
       })
     }
 
@@ -99,6 +132,8 @@ const App = () => {
           .remove(id)
           .then(() => {
             setPersons(persons.filter(person => person.id !== id))
+            setErrorMessage(`Nimi poistettu!`)
+            setTimeout(() => {setErrorMessage(null)}, 2000)
             console.log('Poistettu!')
           })
           .catch(error => {
@@ -121,10 +156,11 @@ const App = () => {
   )
 
 
-
   return (
     <div>
       <h1>Phonebook</h1>
+      <Alert message2 = {alertMessage}/>
+      <Notification message ={errorMessage}/>
       <FilterForm filter={filter} handleFilterChange={handleFilterChange} />
       <AddPersonForm
         add={add}
