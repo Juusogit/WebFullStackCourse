@@ -47,6 +47,7 @@ const App = () => {
 
   const add = (event) => {
     event.preventDefault()
+    console.log('estetty päivittymästä')
 
     if (!newName.trim()) {
       alert('Write your name!')
@@ -69,6 +70,7 @@ const App = () => {
           .update(existingPerson.id, updatedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
+            console.log('päivitetty!')
       })
       return
     }
@@ -97,6 +99,7 @@ const App = () => {
           .remove(id)
           .then(() => {
             setPersons(persons.filter(person => person.id !== id))
+            console.log('Poistettu!')
           })
           .catch(error => {
             console.log(error);
