@@ -1,1 +1,3 @@
-Helsingin Yliopiston "Syväsukellus moderniin websovelluskehitykseen" -kurssin tehtävät [https://fullstackopen.com](https://fullstackopen.com)
+# [Full Stack Open](https://fullstackopen.com/en/)
+
+Course assignments from 'Deep Dive into Modern Web Development' by the University of Helsinki.
