@@ -1,59 +1,9 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": "1"
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": "2"
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": "3"
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": "4"
-    },
-    {
-      "id": "3466",
-      "name": "tiikeri",
-      "number": "asdasd"
-    },
-    {
-      "id": "cd21",
-      "name": "muhlu",
-      "number": "04404475064"
-    },
-    {
-      "id": "11fc",
-      "name": "juuso",
-      "number": "1234"
-    },
-    {
-      "id": "dda8",
-      "name": "elllaa",
-      "number": "1231235555123"
-    },
-    {
-      "id": "fff4",
-      "name": "tiiikeriiiiiii",
-      "number": "12312313124514"
-    },
-    {
-      "id": "6b71",
-      "name": "jussi",
-      "number": "6969"
-    },
-    {
-      "id": "8fbb",
-      "name": "ella",
-      "number": "+123123123123"
+      "id": "8a43",
+      "name": "Ronnie Coleman",
+      "number": "020202"
     }
   ]
 }
