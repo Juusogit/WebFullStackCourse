@@ -3,7 +3,7 @@ import countryService from './services.js/countries'
 
 const FilterForm = ({filter, handleFilterChange}) => (
 <div>
-  find: <input value = {filter} onChange={handleFilterChange}/>
+  find countries: <input value = {filter} onChange={handleFilterChange}/>
 </div>
 )
 
@@ -19,21 +19,21 @@ const CountryList = ({countries, handleShow}) => {
   return (
     <ul>
       {countries.map(country => (
-        <li key={country.name.common}>
+        <div key={country.name.common}>
           {country.name.common}{' '}
           <button onClick={() => handleShow(country.name.common)}>show</button>
-        </li>
+        </div>
       ))}
     </ul>
   )
 }
 
-const CountryDetails = ({ country }) => {
+const CountryDetails = ({ country, apiKey, weather}) => {
   return (
     <div>
       <h2>{country.name.common}</h2>
       <p>Capital: {country.capital[0]}</p>
-      <p>Population: {country.population}</p>
+      <p>Area: {country.area}</p>
       <h3>Languages</h3>
       <ul>
         {Object.values(country.languages).map(lang => (
@@ -45,6 +45,8 @@ const CountryDetails = ({ country }) => {
         alt={`Flag of ${country.name.common}`}
         width="150"
       />
+      <h3>Weather in {country.capital[0]}</h3>
+      {/* <p>temperature {weather.main.temp} Celcius</p> */}
     </div>
   )
 }
@@ -54,6 +56,8 @@ const App = () => {
   const [countries, setuserData] = useState([])
   const [filter, setFilter] = useState('')
   const [selectedCountry, setSelectedCountry] = useState(null)
+  const apiKey = import.meta.env.VITE_API_KEY
+  const [weather, setWeather] = useState([])
 
 useEffect(() => {
   countryService
@@ -88,7 +92,7 @@ useEffect(() => {
         ) : (
           <CountryList countries={countriesToShow} handleShow={handleShow} />
         )}
-      </div>
+      </div> 
     )
   }
 export default App
