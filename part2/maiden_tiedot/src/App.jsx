@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react'
-import countryService from './services.js/countries'
+import countryService from './services/countries'
 
 const FilterForm = ({filter, handleFilterChange}) => (
 <div>
@@ -28,13 +28,39 @@ const CountryList = ({countries, handleShow}) => {
   )
 }
 
-const CountryDetails = ({ country, apiKey, weather}) => {
+const Weather = ({ country }) => {
+  const [weather, setWeather] = useState(null)
+
+  useEffect(() => {
+    if (country && country.capital) {
+      countryService
+        .getWeather(country.capital[0])
+        .then(result => {
+          setWeather(result)
+        });
+    }
+  }, [country])
+
+  if (!country || weather === null) return null
+
   return (
     <div>
+      <h2>Weather in {country.capital[0]}</h2>
+      <p>Temperature: {weather.main.temp} celcius</p>
+      <img alt="weather icon" src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} />
+      <p>Wind: {weather.wind.speed} m/s</p>
+    </div>
+  )
+}
+
+const CountryDetails = ({ country }) => {
+  return (
+    <div>
+      <div>
       <h2>{country.name.common}</h2>
       <p>Capital: {country.capital[0]}</p>
       <p>Area: {country.area}</p>
-      <h3>Languages</h3>
+      <h3>Languages:</h3>
       <ul>
         {Object.values(country.languages).map(lang => (
           <li key={lang}>{lang}</li>
@@ -42,11 +68,10 @@ const CountryDetails = ({ country, apiKey, weather}) => {
       </ul>
       <img
         src={country.flags.svg}
-        alt={`Flag of ${country.name.common}`}
-        width="150"
+        width="200"
       />
-      <h3>Weather in {country.capital[0]}</h3>
-      {/* <p>temperature {weather.main.temp} Celcius</p> */}
+      </div>
+      <Weather country={country}/>
     </div>
   )
 }
@@ -56,8 +81,6 @@ const App = () => {
   const [countries, setuserData] = useState([])
   const [filter, setFilter] = useState('')
   const [selectedCountry, setSelectedCountry] = useState(null)
-  const apiKey = import.meta.env.VITE_API_KEY
-  const [weather, setWeather] = useState([])
 
 useEffect(() => {
   countryService
@@ -88,9 +111,11 @@ useEffect(() => {
       <div>
         <FilterForm filter={filter} handleFilterChange={handleFilterChange} />
         {selectedCountry ? (
+          <div>
           <CountryDetails country={selectedCountry} />
+          </div>
         ) : (
-          <CountryList countries={countriesToShow} handleShow={handleShow} />
+          <CountryList countries={countriesToShow} handleShow={handleShow}/>
         )}
       </div> 
     )
