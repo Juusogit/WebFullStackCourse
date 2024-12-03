@@ -3,7 +3,7 @@ const app = express()
 
 app.use(express.json())
 
-const persons = [
+let persons = [
   {
     id: "1",
     name: "Arto Hellas",
@@ -47,6 +47,48 @@ app.get('/api/persons/:id', (request, response) => {
     (person) {response.json(person)} 
   else  
     {response.status(404).end()}
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  persons = persons.filter(person => person.id !== id)
+
+  response.status(204).end()
+})
+
+const generateId = () => {
+  const maxId = persons.length > 0
+    ? Math.floor(Math.random() * 1000)
+    : 0
+  return String(maxId + 1)
+}
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+
+  if (!body.name||!body.number) {
+    return response.status(400).json({ 
+      error: 'name or number missing'
+    })
+  }
+
+  const uniqueName = persons.some(person => person.name === body.name)
+  if (uniqueName) {
+    return response.status(400).json({ 
+      error: 'name is already in phonebook!' 
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: generateId(),
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
+  
 })
 
 const PORT = 3001
