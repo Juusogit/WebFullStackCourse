@@ -30,17 +30,14 @@ app.get('/api/persons', (request, response) => {
   response.json(persons)
 })
 
-app.get('/info'), (request, response) => {
-  const maxID =  persons.length > 0
-  ? Math.max(...persons.map(n => Number(n.id)))
-  : 0
-
-  const person = request.body
-  person.id = String(maxID + 1)
-  persons = persons.concat(person)
-
-  response.json(person)
-}
+app.get('/info', (request, response) => {
+  const person = persons.length
+  const currentTime = new Date()
+  response.send(`
+    <p>Phonebook has info for ${person} people</p>
+    <p>${currentTime}</p>
+  `)
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
