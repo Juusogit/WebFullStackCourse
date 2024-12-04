@@ -67,6 +67,10 @@ const App = () => {
       .then(initialPerson => {
         setPersons(initialPerson)
       })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setPersons([])
+      });
   }, [])
 
   const add = (event) => {
