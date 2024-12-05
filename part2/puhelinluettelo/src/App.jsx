@@ -65,6 +65,7 @@ const App = () => {
     peopleService
       .getAll()
       .then(initialPerson => {
+        console.log('fetched persons:', initialPerson)
         setPersons(initialPerson)
       })
       .catch(error => {
