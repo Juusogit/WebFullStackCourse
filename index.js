@@ -69,20 +69,20 @@ app.post('/api/persons', (request, response, next) => {
   const body = request.body
   console.log(body)
 
-  // if (!body.name||!body.number) {
-  //   return response.status(400).json({ 
-  //     error: 'name or number missing'
-  //   })
-  //   .catch(error => next(error))
-  // }
+  if (body.content === undefined) {
+    return response.status(400).json({ 
+      error: 'name or number missing'
+    })
+    .catch(error => next(error))
+  }
 
-  // const uniqueName = persons.some(person => person.name === body.name)
-  // if (uniqueName) {
-  //   return response.status(400).json({ 
-  //     error: 'name is already in phonebook!' 
-  //   })
-  //   .catch(error =>next(error))
-  // }
+  const uniqueName = persons.some(person => person.name === body.name)
+  if (uniqueName) {
+    return response.status(400).json({ 
+      error: 'name is already in phonebook!' 
+    })
+    .catch(error =>next(error))
+  }
 
   const person = new Person({
     name: body.name,
@@ -101,7 +101,7 @@ app.post('/api/persons', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
   const person = {
-    number: body.number,
+    number: body.number
   }
 
   Person.findByIdAndUpdate(request.params.id, person, {new:true})
