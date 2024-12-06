@@ -104,7 +104,7 @@ const App = () => {
             console.log('numero päivitetty!')
         })
             .catch(error => {
-            setAlertMessage(`An error has occurred.`)
+            setAlertMessage(`Virheellinen syöttö`)
             setTimeout(() => { setAlertMessage(null) }, 2000)
             console.error('VIRHE', error)
         })
@@ -125,6 +125,11 @@ const App = () => {
         setNewNumber('')
         setErrorMessage(`Nimi lisätty!`)
             setTimeout(() => {setErrorMessage(null)}, 2000)
+      })
+      .catch(error => {
+        setAlertMessage('fake id & number')
+        setTimeout(() => { setAlertMessage(null) }, 2000)
+        console.error('feikki', error)
       })
     }
 
