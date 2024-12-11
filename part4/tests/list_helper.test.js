@@ -88,3 +88,26 @@ describe('total likes', () => {
     assert.strictEqual(result, 36)
   })
 })
+
+describe('favorite blog according to most likes', () => {
+  test('of empty list is zero', () => {
+    const result = listHelper.favoriteBlog(emptyBlog)
+    assert.strictEqual(result, null)
+  })
+  test('when list has only one blog equals the likes of that', () => {
+    const result = listHelper.favoriteBlog(blog)
+    assert.deepStrictEqual(result, {
+      title: 'React patterns',
+      author: 'Michael Chan',
+      likes: 7,
+    })
+  })
+  test('favorite blog of bloglist', () => {
+    const result = listHelper.favoriteBlog(blogs)
+    assert.deepStrictEqual(result, {
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      likes: 12
+    })
+  })
+})
