@@ -111,3 +111,24 @@ describe('favorite blog according to most likes', () => {
     })
   })
 })
+
+describe('most blogs by author', () => {
+  test('of empty list is zero', () => {
+    const result = listHelper.mostBlogs(emptyBlog)
+    assert.strictEqual(result, null)
+  })
+  test('when list has only one blog', () => {
+    const result = listHelper.mostBlogs(blog)
+    assert.deepStrictEqual(result, {
+      author: 'Michael Chan',
+      blogs: 1
+    })
+  })
+  test('from many bloggers', () => {
+    const result = listHelper.mostBlogs(blogs)
+    assert.deepStrictEqual(result, {
+      author: 'Robert C. Martin',
+      blogs: 3
+    })
+  })
+})
