@@ -51,7 +51,7 @@ test.only('a blog can be added', async () => {
     title: 'sup',
     author: 'jamaaal',
     url: 'www.google.com',
-    likes: undefined
+    likes: 0,
   }
 
   await api
