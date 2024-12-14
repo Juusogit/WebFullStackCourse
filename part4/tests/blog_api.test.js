@@ -14,17 +14,24 @@ beforeEach(async () => {
     await Blog.insertMany(helper.initialBlogs)
 })
 
+test.only('notes are returned as json', async () => {
+  await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+})
+
 test.only('right amount of blogs', async () => {
   const response = await api.get('/api/blogs')
 
-  assert.strictEqual(response.body.length, 2)
+  assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
-test.only('the first blogs title is tiikeri', async () => {
+test.only('a specific blog is within the returned blogs', async () => {
   const response = await api.get('/api/blogs')
 
   const titles = response.body.map(e => e.title)
-  assert.strictEqual(titles.includes('tiikeri'), true)
+  assert(titles.includes('tiikeri'), true)
 })
 
 test.only('blogs have id', async () => {
@@ -33,8 +40,8 @@ test.only('blogs have id', async () => {
 
   blogs.forEach(blog => {
     assert.strictEqual(blog.id !== undefined, true)
-    assert.strictEqual(blog._id, undefined) 
-})
+    assert.strictEqual(blog._id, undefined)
+  })
 })
 
 test.only('a blog can be added', async () => {
@@ -51,9 +58,10 @@ test.only('a blog can be added', async () => {
   .expect(201)
   .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/blogs')
-  const titles = response.body.map(r => r.title)
-  assert.strictEqual(response.body.length, helper.initialBlogs.length + 1)
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+
+  const titles = blogsAtEnd.map(n => n.title)
   assert(titles.includes('sup'))
 })
 
@@ -85,9 +93,9 @@ test.only('a blog without title or url cant be added', async () => {
   .send(newBlog)
   .expect(400)
 
-  const response = await api.get('/api/blogs')
+  const blogsAtEnd = await helper.blogsInDb()
 
-  assert.strictEqual(response.body.length, helper.initialBlogs.length)
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
 test.only ('a blog can be deleted', async () => {
@@ -100,7 +108,9 @@ test.only ('a blog can be deleted', async () => {
 
   const blogsAtEnd = await helper.blogsInDb()
 
-  const titles = blogsAtEnd.map(r=>r.title)
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+
+  const titles = blogsAtEnd.map(r => r.title)
   assert(!titles.includes(blogToDelete.title))
 })
 
