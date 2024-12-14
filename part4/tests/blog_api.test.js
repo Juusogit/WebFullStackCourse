@@ -75,7 +75,9 @@ test.only('if blogs likes are null return 0', async () => {
 
 test.only('a blog without title or url cant be added', async () => {
   const newBlog = {
+    title: undefined,
     author: 'myllis',
+    url: undefined
   }
 
   await api
@@ -86,6 +88,20 @@ test.only('a blog without title or url cant be added', async () => {
   const response = await api.get('/api/blogs')
 
   assert.strictEqual(response.body.length, helper.initialBlogs.length)
+})
+
+test.only ('a blog can be deleted', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+  .delete(`/api/blogs/${blogToDelete.id}`)
+  .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  const titles = blogsAtEnd.map(r=>r.title)
+  assert(!titles.includes(blogToDelete.title))
 })
 
 after(async () => {
