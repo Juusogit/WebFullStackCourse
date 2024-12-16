@@ -51,7 +51,7 @@ test.only('a blog can be added', async () => {
     title: 'sup',
     author: 'jamaaal',
     url: 'www.google.com',
-    likes: 0,
+    likes: 0
   }
 
   await api
@@ -152,7 +152,7 @@ describe('when there is initially one user at db', () => {
       const newUser = {
         username: 'mluukkai',
         name: 'Matti Luukkainen',
-        password: 'salainen',
+        password: 'salainen'
       }
   
       await api
