@@ -12,11 +12,10 @@ const User = require('../models/user')
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-
     await Blog.insertMany(helper.initialBlogs)
 })
 
-test.only('notes are returned as json', async () => {
+test.only('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
