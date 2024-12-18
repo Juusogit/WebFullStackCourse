@@ -11,8 +11,11 @@ const User = require('../models/user')
 
 
 beforeEach(async () => {
-    await Blog.deleteMany({})
-    await Blog.insertMany(helper.initialBlogs)
+  await Blog.deleteMany({})
+  await Blog.insertMany(helper.initialBlogs)
+  await User.deleteMany({})
+  await User.insertMany([])
+  await helper.addLoginUser()
 })
 
 test.only('blogs are returned as json', async () => {
@@ -45,6 +48,20 @@ test.only('blogs have id', async () => {
   })
 })
 
+beforeEach(async () => {
+  const user = {
+    username: 'root',
+    password: 'password',
+  }
+  const loginUser = await api
+      .post('/api/login')
+      .send(user)
+
+   headers = {
+    'Authorization': `bearer ${loginUser.body.token}`
+     }
+  })
+
 test.only('a blog can be added', async () => {
   const newBlog = {
     title: 'sup',
@@ -57,6 +74,7 @@ test.only('a blog can be added', async () => {
   .post('/api/blogs')
   .send(newBlog)
   .expect(201)
+  .set(headers)
   .expect('Content-Type', /application\/json/)
 
   const blogsAtEnd = await helper.blogsInDb()
