@@ -20,7 +20,7 @@ const initialBlogs = [
 const initialUsers = [
   {
     username: 'ella',
-    password: 'secret'
+    passwordHash: 'secret'
   },
   {
     username: 'juuso',
@@ -46,8 +46,8 @@ const initialUsers = [
   }
 
   const addLoginUser = async () => {
-    const passwordHash = await bcrypt.hash(initialUsers[0].password, 10)
-    const user = new User({ username: initialUsers[0].username, passwordHash })
+    const passwordHash = await bcrypt.hash(initialUsers[1].password, 10)
+    const user = new User({ username: initialUsers[1].username, passwordHash })
     await user.save()
   }
 

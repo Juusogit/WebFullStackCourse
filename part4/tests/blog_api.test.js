@@ -48,39 +48,36 @@ test.only('blogs have id', async () => {
   })
 })
 
-beforeEach(async () => {
-  const user = {
-    username: 'root',
-    password: 'password',
-  }
-  const loginUser = await api
-      .post('/api/login')
-      .send(user)
-
-   headers = {
-    'Authorization': `bearer ${loginUser.body.token}`
-     }
-  })
-
 test.only('a blog can be added', async () => {
-  const newBlog = {
+  const blogsAtStart = await helper.blogsInDb()
+  const testBlog = {
     title: 'sup',
     author: 'jamaaal',
     url: 'www.google.com',
     likes: 0
   }
 
+  const user = {
+    username: 'root',
+    password: 'password',
+  }
+
+  const loginUser = 
+  await api
+    .post('/api/login')
+    .send(user)
+  
   await api
   .post('/api/blogs')
-  .send(newBlog)
+  .set('Authorization', `Bearer ${loginUser.body.token}`)
+  .send(testBlog)
   .expect(201)
-  .set(headers)
   .expect('Content-Type', /application\/json/)
 
   const blogsAtEnd = await helper.blogsInDb()
-  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+  assert.strictEqual(blogsAtEnd.length, blogsAtStart.length + 1)
 
-  const titles = blogsAtEnd.map(n => n.title)
+  const titles = blogsAtEnd.map(blog => blog.title)
   assert(titles.includes('sup'))
 })
 
