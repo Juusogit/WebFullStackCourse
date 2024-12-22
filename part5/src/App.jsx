@@ -19,6 +19,14 @@ const App = () => {
         setBlogs( blogs )
     })  
   }, [])
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+      if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        setUser(user)
+        blogService.setToken(user.token)    
+      }  
+  }, [])
 
   const addBlog = (event) => {
     event.preventDefault()
@@ -34,18 +42,36 @@ const App = () => {
       })
   }
 
+  const handleBlogChange = (event) => {
+    setNewBlog(event.target.value)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
-
     try {
       const user = await loginService.login({username, password})
-            noteService.setToken(user.token)
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+            blogService.setToken(user.token)
             setUser(user)      
             setUsername('')      
             setPassword('')    
           } catch (exception) 
           {      
             setErrorMessage('wrong credentials')
+            setTimeout(() => {
+            setErrorMessage(null)
+            }, 5000)    
+          }  
+        }
+     
+  const handleLogout = async (event) => {
+    event.preventDefault()
+    try {
+      window.localStorage.removeItem('loggedUser')
+            setUser(null)
+          } catch (exception) 
+          {      
+            setErrorMessage('cant logout')
             setTimeout(() => {
             setErrorMessage(null)
             }, 5000)    
@@ -84,26 +110,30 @@ const App = () => {
     </form>
   )
 
-
-return (
-  <div>
-    <h1>Blogs</h1>
-    <Notification message={errorMessage}/>
-
-    {!user && loginForm()}
-    {user && <div>
-      <p>{user.name} logged in</p>
-      {blogForm()}
-    </div>
-    }
+  return (
     <div>
-      <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      <h1>Bloggynator</h1>
+      <Notification message={errorMessage} />
+      {user === null ? (
+      <>
+      <h2>Log in</h2>
+      {loginForm()}
+      </>
+  ) : (
+        <div>
+          <p>logged in as {user.name}</p>
+          <div>
+            <h2>blogs</h2>
+            {blogs.map(blog => (
+              <Blog key={blog.id} blog={blog} />
+            ))}
+          </div>
+          {blogForm()}
+        <button onClick = {handleLogout}>Logout🚪</button>
+        </div>
       )}
+      <Footer />
     </div>
-    <Footer />
-  </div>
   )
 }
 
