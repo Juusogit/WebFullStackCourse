@@ -31,7 +31,9 @@ const App = () => {
   const addBlog = (event) => {
     event.preventDefault()
     const blogObject = {
-      content: newBlog
+      title: newBlog,
+      author: newBlog,
+      url: newBlog
     }
 
     blogService
