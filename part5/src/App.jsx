@@ -50,7 +50,7 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({username, password})
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
             blogService.setToken(user.token)
             setUser(user)      
             setUsername('')      
@@ -67,14 +67,14 @@ const App = () => {
   const handleLogout = async (event) => {
     event.preventDefault()
     try {
-      window.localStorage.removeItem('loggedUser')
+      window.localStorage.removeItem('loggedNoteappUser')
             setUser(null)
           } catch (exception) 
           {      
             setErrorMessage('cant logout')
             setTimeout(() => {
             setErrorMessage(null)
-            }, 5000)    
+            }, 3000)
           }  
         }
 
