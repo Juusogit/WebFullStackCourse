@@ -10,7 +10,7 @@ import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState('')
+  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
   const [errorMessage, setErrorMessage] = useState(null)
   const [infoMessage, setInfoMessage] = useState(null)
   const [username, setUsername] = useState('')
@@ -34,15 +34,11 @@ const App = () => {
 
   const addBlog = (event) => {
     event.preventDefault()
-    const blogObject = {
-      title: newBlog,
-      author: newBlog,
-      url: newBlog,
-    }
+    const blogObject = { ...newBlog }
 
     blogService.create(blogObject).then((returnedBlog) => {
       setBlogs(blogs.concat(returnedBlog))
-      setNewBlog('')
+      setNewBlog({ title: '', author: '', url: '' })
       setInfoMessage(
         `a new blog ${blogObject.title} by ${blogObject.author} added`
       )
@@ -53,7 +49,8 @@ const App = () => {
   }
 
   const handleBlogChange = (event) => {
-    setNewBlog(event.target.value)
+    const { name, value } = event.target
+    setNewBlog({ ...newBlog, [name]: value })
   }
 
   const handleLogin = async (event) => {
