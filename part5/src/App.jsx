@@ -9,23 +9,23 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [newBlog, setNewBlog] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')   
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService.getAll()
-      .then(blogs => {
-        setBlogs( blogs )
-    })  
+    blogService.getAll().then((blogs) => {
+      setBlogs(blogs)
+    })
   }, [])
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
-      if (loggedUserJSON) {
-        const user = JSON.parse(loggedUserJSON)
-        setUser(user)
-        blogService.setToken(user.token)    
-      }  
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
   }, [])
 
   const addBlog = (event) => {
@@ -33,15 +33,13 @@ const App = () => {
     const blogObject = {
       title: newBlog,
       author: newBlog,
-      url: newBlog
+      url: newBlog,
     }
 
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setNewBlog('')
-      })
+    blogService.create(blogObject).then((returnedBlog) => {
+      setBlogs(blogs.concat(returnedBlog))
+      setNewBlog('')
+    })
   }
 
   const handleBlogChange = (event) => {
@@ -51,64 +49,61 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({username, password})
+      const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
-            blogService.setToken(user.token)
-            setUser(user)      
-            setUsername('')      
-            setPassword('')    
-          } catch (exception) 
-          {      
-            setErrorMessage('wrong credentials')
-            setTimeout(() => {
-            setErrorMessage(null)
-            }, 5000)    
-          }  
-        }
-     
+      blogService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const handleLogout = async (event) => {
     event.preventDefault()
     try {
       window.localStorage.removeItem('loggedNoteappUser')
-            setUser(null)
-          } catch (exception) 
-          {      
-            setErrorMessage('cant logout')
-            setTimeout(() => {
-            setErrorMessage(null)
-            }, 3000)
-          }  
-        }
+      setUser(null)
+    } catch (exception) {
+      setErrorMessage('cant logout')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 3000)
+    }
+  }
 
-  const loginForm = () => (      
-    <form onSubmit={handleLogin}>        
-    <div>          
-      username
-      <input            
-      type="text"            
-      value={username}            
-      name="Username"
-      onChange={({ target }) => setUsername(target.value)}/>
-    </div>
-    <div>
-      password
-        <input 
-        type="password" 
-        value={password} 
-        name="Password"      
-        onChange={({ target }) => setPassword(target.value)}/>
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
+      <div>
+        username
+        <input
+          type='text'
+          value={username}
+          name='Username'
+          onChange={({ target }) => setUsername(target.value)}
+        />
       </div>
-        <button type="submit">login</button>
-      </form>
+      <div>
+        password
+        <input
+          type='password'
+          value={password}
+          name='Password'
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button type='submit'>login</button>
+    </form>
   )
 
   const blogForm = () => (
     <form onSubmit={addBlog}>
-      <input
-      value={newBlog}
-      onChange={handleBlogChange}
-      />
-      <button type="submit">save</button>
+      <input value={newBlog} onChange={handleBlogChange} />
+      <button type='submit'>save</button>
     </form>
   )
 
@@ -117,21 +112,21 @@ const App = () => {
       <h1>Bloggynator</h1>
       <Notification message={errorMessage} />
       {user === null ? (
-      <>
-      <h2>Log in</h2>
-      {loginForm()}
-      </>
-  ) : (
+        <>
+          <h2>Log in</h2>
+          {loginForm()}
+        </>
+      ) : (
         <div>
           <p>logged in as {user.name}</p>
           <div>
             <h2>blogs</h2>
-            {blogs.map(blog => (
+            {blogs.map((blog) => (
               <Blog key={blog.id} blog={blog} />
             ))}
           </div>
           {blogForm()}
-        <button onClick = {handleLogout}>Logout🚪</button>
+          <button onClick={handleLogout}>Logout🚪</button>
         </div>
       )}
       <Footer />
