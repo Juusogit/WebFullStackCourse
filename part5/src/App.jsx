@@ -5,6 +5,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Info from './components/Info'
+import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -88,48 +90,6 @@ const App = () => {
     }
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type='text'
-          value={username}
-          name='Username'
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type='password'
-          value={password}
-          name='Password'
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type='submit'>login</button>
-    </form>
-  )
-
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        title
-        <input value={newBlog.title} onChange={handleBlogChange} />
-      </div>
-      <div>
-        url
-        <input value={newBlog.url} onChange={handleBlogChange} />
-      </div>
-      <div>
-        author
-        <input value={newBlog.author} onChange={handleBlogChange} />
-      </div>
-      <button type='submit'>Add a new blog!</button>
-    </form>
-  )
-
   return (
     <div>
       <h1>Bloggynator</h1>
@@ -137,7 +97,13 @@ const App = () => {
       {user === null ? (
         <>
           <h2>Log in</h2>
-          {loginForm()}
+          <LoginForm
+            username={username}
+            password={password}
+            handleLogin={handleLogin}
+            setUsername={setUsername}
+            setPassword={setPassword}
+          />
         </>
       ) : (
         <div>
@@ -149,7 +115,11 @@ const App = () => {
               <Blog key={blog.id} blog={blog} />
             ))}
           </div>
-          {blogForm()}
+          <BlogForm
+            addBlog={addBlog}
+            newBlog={newBlog}
+            handleBlogChange={handleBlogChange}
+          />
           <button onClick={handleLogout}>Logout🚪</button>
         </div>
       )}
