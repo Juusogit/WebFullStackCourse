@@ -4,11 +4,13 @@ import Footer from './components/Footer'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Info from './components/Info'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [newBlog, setNewBlog] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
+  const [infoMessage, setInfoMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -55,11 +57,15 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setInfoMessage('logged in!')
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 1500)
     } catch (exception) {
-      setErrorMessage('wrong credentials')
+      setErrorMessage('wrong username or password')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
+      }, 1500)
     }
   }
 
@@ -72,7 +78,7 @@ const App = () => {
       setErrorMessage('cant logout')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 3000)
+      }, 1500)
     }
   }
 
@@ -129,6 +135,7 @@ const App = () => {
         </>
       ) : (
         <div>
+          <Info info={infoMessage} />
           <p>logged in as {user.name}</p>
           <div>
             <h2>blogs</h2>
