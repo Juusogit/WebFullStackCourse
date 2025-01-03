@@ -20,7 +20,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -50,7 +50,7 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
-      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -66,7 +66,7 @@ const App = () => {
   const handleLogout = async (event) => {
     event.preventDefault()
     try {
-      window.localStorage.removeItem('loggedNoteappUser')
+      window.localStorage.removeItem('loggedUser')
       setUser(null)
     } catch (exception) {
       setErrorMessage('cant logout')
@@ -102,8 +102,19 @@ const App = () => {
 
   const blogForm = () => (
     <form onSubmit={addBlog}>
-      <input value={newBlog} onChange={handleBlogChange} />
-      <button type='submit'>save</button>
+      <div>
+        title
+        <input value={newBlog.title} onChange={handleBlogChange} />
+      </div>
+      <div>
+        url
+        <input value={newBlog.url} onChange={handleBlogChange} />
+      </div>
+      <div>
+        author
+        <input value={newBlog.author} onChange={handleBlogChange} />
+      </div>
+      <button type='submit'>Add a new blog!</button>
     </form>
   )
 
