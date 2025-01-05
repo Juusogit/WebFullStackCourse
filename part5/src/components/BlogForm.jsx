@@ -9,7 +9,7 @@ const BlogForm = ({ addBlog, newBlog, handleBlogChange }) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={() => setBlogVisible(true)}>Add a new Blog!</button>
+        <button onClick={() => setBlogVisible(true)}>Create</button>
       </div>
       <div style={showWhenVisible}>
         <form onSubmit={addBlog}>
@@ -33,7 +33,14 @@ const BlogForm = ({ addBlog, newBlog, handleBlogChange }) => {
             url
             <input name='url' value={newBlog.url} onChange={handleBlogChange} />
           </div>
-          <button type='submit'>Add a new blog!</button>
+          <button
+            type='submit'
+            onClick={() => {
+              setTimeout(() => setBlogVisible(false), 1000)
+            }}
+          >
+            Add a new blog!
+          </button>
         </form>
         <button onClick={() => setBlogVisible(false)}>cancel</button>
       </div>
