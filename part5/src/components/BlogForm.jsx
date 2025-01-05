@@ -1,19 +1,44 @@
-const BlogForm = ({ addBlog, newBlog, handleBlogChange }) => (
-  <form onSubmit={addBlog}>
+import { useState } from 'react'
+
+const BlogForm = ({ addBlog, newBlog, handleBlogChange }) => {
+  const [blogVisible, setBlogVisible] = useState(false)
+
+  const hideWhenVisible = { display: blogVisible ? 'none' : '' }
+  const showWhenVisible = { display: blogVisible ? '' : 'none' }
+
+  return (
     <div>
-      title
-      <input name='title' value={newBlog.title} onChange={handleBlogChange} />
+      <div style={hideWhenVisible}>
+        <button onClick={() => setBlogVisible(true)}>Add a new Blog!</button>
+      </div>
+      <div style={showWhenVisible}>
+        <form onSubmit={addBlog}>
+          <div>
+            title
+            <input
+              name='title'
+              value={newBlog.title}
+              onChange={handleBlogChange}
+            />
+          </div>
+          <div>
+            author
+            <input
+              name='author'
+              value={newBlog.author}
+              onChange={handleBlogChange}
+            />
+          </div>
+          <div>
+            url
+            <input name='url' value={newBlog.url} onChange={handleBlogChange} />
+          </div>
+          <button type='submit'>Add a new blog!</button>
+        </form>
+        <button onClick={() => setBlogVisible(false)}>cancel</button>
+      </div>
     </div>
-    <div>
-      author
-      <input name='author' value={newBlog.author} onChange={handleBlogChange} />
-    </div>
-    <div>
-      url
-      <input name='url' value={newBlog.url} onChange={handleBlogChange} />
-    </div>
-    <button type='submit'>Add a new blog!</button>
-  </form>
-)
+  )
+}
 
 export default BlogForm
