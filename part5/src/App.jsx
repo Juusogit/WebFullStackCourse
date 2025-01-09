@@ -89,6 +89,40 @@ const App = () => {
     }
   }
 
+  const sortBlogs = (blogs) => {
+    return blogs.sort((a, b) => b.likes - a.likes)
+  }
+
+  const likeUpdate = async (blog) => {
+    const { id, title, author, url, likes } = blog
+    try {
+      const updatedBlog = await blogService.update({
+        id,
+        title,
+        author,
+        url,
+        likes: likes + 1,
+      })
+      setBlogs(
+        sortBlogs(
+          blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+        )
+      )
+    } catch (error) {
+      setErrorMessage('cant like blog')
+    }
+  }
+
+  const deleteBlog = async ({ id, title, author }) => {
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter((blog) => blog.id !== id))
+      setInfoMessage(`blog ${title} by ${author} was deleted`, 'success')
+    } catch (error) {
+      setErrorMessage('cant delete blog')
+    }
+  }
+
   return (
     <div>
       <h1>Bloggynator</h1>
@@ -107,11 +141,20 @@ const App = () => {
       ) : (
         <div>
           <Info info={infoMessage} />
-          <p>logged in as {user.name}</p>
+          <p>
+            logged in as {user.name}{' '}
+            <button onClick={handleLogout}>Logout🚪</button>
+          </p>
           <div>
             <h2>blogs</h2>
             {blogs.map((blog) => (
-              <Blog key={blog.id} blog={blog} />
+              <Blog
+                key={blog.id}
+                blog={blog}
+                likeUpdate={likeUpdate}
+                deleteBlog={deleteBlog}
+                user={user}
+              />
             ))}
           </div>
           <Togglable buttonLabel='Create a new blog' ref={blogFormRef}>
@@ -121,7 +164,6 @@ const App = () => {
               handleBlogChange={handleBlogChange}
             />
           </Togglable>
-          <button onClick={handleLogout}>Logout🚪</button>
         </div>
       )}
       <Footer />
