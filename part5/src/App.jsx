@@ -7,6 +7,7 @@ import loginService from './services/login'
 import Info from './components/Info'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -16,7 +17,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const noteFormRef = useRef()
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
@@ -36,10 +37,10 @@ const App = () => {
   const addBlog = (event) => {
     event.preventDefault()
     const blogObject = { ...newBlog }
-
     blogService.create(blogObject).then((returnedBlog) => {
       setBlogs(blogs.concat(returnedBlog))
       setNewBlog({ title: '', author: '', url: '' })
+      blogFormRef.current.toggleVisibility()
       setInfoMessage(
         `a new blog ${blogObject.title} by ${blogObject.author} added`
       )
@@ -113,11 +114,13 @@ const App = () => {
               <Blog key={blog.id} blog={blog} />
             ))}
           </div>
-          <BlogForm
-            addBlog={addBlog}
-            newBlog={newBlog}
-            handleBlogChange={handleBlogChange}
-          />
+          <Togglable buttonLabel='Create a new blog' ref={blogFormRef}>
+            <BlogForm
+              addBlog={addBlog}
+              newBlog={newBlog}
+              handleBlogChange={handleBlogChange}
+            />
+          </Togglable>
           <button onClick={handleLogout}>Logout🚪</button>
         </div>
       )}
