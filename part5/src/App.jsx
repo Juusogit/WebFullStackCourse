@@ -103,6 +103,7 @@ const App = () => {
         url,
         likes: likes + 1,
       })
+
       setBlogs(
         sortBlogs(
           blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
@@ -110,6 +111,7 @@ const App = () => {
       )
     } catch (error) {
       setErrorMessage('cant like blog')
+      setTimeout(() => setErrorMessage(null), 1500)
     }
   }
 
@@ -147,15 +149,17 @@ const App = () => {
           </p>
           <div>
             <h2>blogs</h2>
-            {blogs.map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                likeUpdate={likeUpdate}
-                deleteBlog={deleteBlog}
-                user={user}
-              />
-            ))}
+            {blogs
+              .sort((a, b) => b.likes - a.likes)
+              .map((blog) => (
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  likeUpdate={likeUpdate}
+                  deleteBlog={deleteBlog}
+                  user={user}
+                />
+              ))}
           </div>
           <Togglable buttonLabel='Create a new blog' ref={blogFormRef}>
             <BlogForm
