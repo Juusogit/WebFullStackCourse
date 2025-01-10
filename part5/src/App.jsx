@@ -89,10 +89,6 @@ const App = () => {
     }
   }
 
-  const sortBlogs = (blogs) => {
-    return blogs.sort((a, b) => b.likes - a.likes)
-  }
-
   const likeUpdate = async (blog) => {
     const { id, title, author, url, likes } = blog
     try {
@@ -104,11 +100,7 @@ const App = () => {
         likes: likes + 1,
       })
 
-      setBlogs(
-        sortBlogs(
-          blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-        )
-      )
+      setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)))
     } catch (error) {
       setErrorMessage('cant like blog')
       setTimeout(() => setErrorMessage(null), 1500)
